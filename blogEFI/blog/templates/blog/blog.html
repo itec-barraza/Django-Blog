@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+{%block title%} Posts {%endblock %}
+{%block content %}
+
+<section class="my-5" style="background-color: burlywood;">    
+    <div class="text-center">
+        <a class="link " href="{% url 'addPost' %}">
+            <button class="btn btn-lg btn-info mt-5">Nuevo Post</button>
+        </a>
+    </div>
+    <div class="container py-5">
+        {% for post in posts%}
+        <div class="row mb-3">
+            <div class="col-xl-9 mx-auto">
+                <div class="p-5 text-center rounded" style="background-color: rgb(224, 224, 224);">
+                    <h2 class="mb-4">
+                        <span class="h5">{{post.published|date:"SHORT_DATE_FORMAT"}}</span>
+                        <br>
+                        <span>{{post.title}}</span>
+                    </h2>
+                    <p class="mb-4">
+                        {% if post.image %}
+                        <img class="col-md-4 mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="{{post.image.url}}" alt="">
+                        {%endif%}
+                    </p>
+                    <p class="mb-0">
+                        {{post.content | safe | linebreaks}}
+                    </p>
+                    <p class="mb-0 mt-4">
+                        <span>Publicado por
+                            <em><b><a href="{% url 'user' post.author.id %}" class="text-dark">
+                                        {{post.author}}
+                                    </a></b></em> en
+                            <em>
+                                {%for category in post.category.all%}
+                                <a href="{% url 'category' category.id %}" class="link">
+                                    {{category.name}}{%if not forloop.last%},{%endif%}
+                                </a>
+                            </em></span>
+                        {%endfor%}
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        {%endfor%}
+    </div>
+</section>
+
+{%endblock%}
